@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/s-yoshiii/postgre-sql-tutrial#readme",
   "dependencies": {
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "nodemon": "^2.0.19",
     "pg": "^8.7.3"
