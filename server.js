@@ -13,6 +13,7 @@ app.get("/persons", (req, res) => {
     return res.status(200).json(results.rows);
   });
 });
+
 // IDを指定して取得
 app.get("/persons/:id", (req, res) => {
   const id = req.params.id;
@@ -21,19 +22,19 @@ app.get("/persons/:id", (req, res) => {
     return res.status(200).json(results.rows);
   });
 });
-// personを追加する
+// ユーザーを追加する
 app.post("/persons", (req, res) => {
-  const { name, emeil, age } = req.body;
+  const { name, email, age } = req.body;
   pool.query(
-    "SELECT s from persons WHERE s.email = $1",
-    [emeil],
+    "SELECT s from persons s WHERE s.email = $1",
+    [email],
     (error, results) => {
       if (results.rows.length) {
-        res.send("すでに存在します");
+        return res.send("ユーザーがすでに存在します");
       }
       pool.query(
-        "INSERT INTO persons(name,email,age) values($1,$2,$3)",
-        [name, emeil, age],
+        "INSERT INTO persons( name , email , age) values($1,$2,$3)",
+        [name, email, age],
         (error, results) => {
           if (error) throw error;
           res.status(201).send("ユーザーの作成に成功しました");
