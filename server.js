@@ -43,6 +43,21 @@ app.post("/persons", (req, res) => {
     }
   );
 });
+// ユーザーを削除する
+app.delete("/persons/:id", (req, res) => {
+  const id = req.params.id;
+  pool.query("SELECT * FROM persons WHERE id = $1", [id], (error, results) => {
+    if (error) throw error;
+    const isPersonExist = results.rows.length;
+    if (!isPersonExist) {
+      return res.status(200).send("ユーザーが存在しません。");
+    }
+    pool.query("DELETE FROM persons WHERE id = $1", [id], (error, results) => {
+      if (error) throw error;
+      return res.status(200).send("ユーザーの削除に成功しました");
+    });
+  });
+});
 app.listen(PORT, () => {
   console.log(`server is running on ${PORT}`);
 });
