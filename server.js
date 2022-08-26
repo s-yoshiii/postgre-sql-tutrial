@@ -58,6 +58,26 @@ app.delete("/persons/:id", (req, res) => {
     });
   });
 });
+// ユーザーを更新する
+app.put("/persons/:id", (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+  pool.query("SELECT * FROM persons WHERE id = $1", [id], (error, results) => {
+    if (error) throw error;
+    const isPersonExist = results.rows.length;
+    if (!isPersonExist) {
+      return res.status(200).send("ユーザーが存在しません。");
+    }
+    pool.query(
+      "UPDATE persons SET name = $1 WHERE id = $2",
+      [name, id],
+      (error, results) => {
+        if (error) throw error;
+        return res.status(200).send("ユーザーの更新に成功しました");
+      }
+    );
+  });
+});
 app.listen(PORT, () => {
   console.log(`server is running on ${PORT}`);
 });
